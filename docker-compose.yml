@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=buyfood
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    networks: 
+      - shared-networks
+    volumes: 
+      - 
+
+  app-prod:
+    container_name: react_app_prod
+    image: react_app_prod:1.0.0
+    build:
+      context: react_food_app
+      target: production
+      dockerfile: Dockerfile
+    command: npm run start:prod
+    ports:
+      - 3000:3000
+    networks:
+      - shared-networks
+    restart: unless-stopped
+
+networks:
+  shared-networks:
